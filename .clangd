@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    - "-std=c++14"
+    - "-I/usr/local/share/verilator/include"
+    - "-I./obj_dir/"
