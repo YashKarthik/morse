@@ -1,20 +1,21 @@
 `default_nettype none
 
 module clock #(
-    parameter N = 13'd624
+    parameter int COUNTER_WIDTH = 13,
+    parameter bit[COUNTER_WIDTH-1:0] MAX_COUNT = 624
 ) (
     input wire i_clk,
     input wire i_rst,
     output reg o_clk
 );
 
-    reg [13:0] counter;
+    reg [COUNTER_WIDTH-1:0] counter;
 
     always @ (posedge i_clk, posedge i_rst) begin
         if (i_rst) begin
             counter <= 0;
             o_clk <= 0;
-        end else if (counter == N) begin
+        end else if (counter == MAX_COUNT) begin
             counter <= 0;
             o_clk <= ~o_clk;
         end else begin
