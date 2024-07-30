@@ -10,15 +10,15 @@ module main (
 );
 
     wire LED_B_inv;
-    reg LED_R_inv;
+    wire LED_R_inv;
 
     wire uart_ready;
     wire blinker_ready;
     reg blinker_read;
 
     wire [7:0] rx_ascii;
-    reg [19:0] morse_data;
-    reg [10:0] morse_data_buff;
+    wire [19:0] morse_data;
+    wire [19:0] morse_data_buff;
 
     assign LED_B = ~LED_B_inv;
     assign LED_R = ~LED_R_inv;
@@ -37,27 +37,23 @@ module main (
         .out(morse_data)
     );
 
-    blinker morse_blinker (
-        .morse_code(morse_data),
+    buffer morse_buffer (
         .i_clk(clk),
         .i_rst(~SW[0]),
-        .i_read(~SW[1]),
+        .i_w_data(morse_data),
+        .i_r_next(blinker_ready),
+        .o_r_data(morse_data_buff),
+        .buff_warn(LED_R_inv)
+    );
+
+    blinker morse_blinker (
+        .morse_code(morse_data_buff),
+        .i_clk(clk),
+        .i_rst(~SW[0]),
+        .i_read(blinker_ready),
         .i_s3(0),
         .i_s7(0),
         .LED_B(LED_B_inv),
         .ready(blinker_ready)
     );
-
-    always @ (posedge blinker_ready) begin
-        morse_data_buff <= morse_data[19:9];
-        blinker_read <= 1;
-    end
-
-    always @ (posedge clk) begin
-        LED_R_inv <= 0;
-        if (~uart_ready && ~blinker_ready) begin
-            LED_R_inv <= 1;
-        end
-    end
-
 endmodule

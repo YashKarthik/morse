@@ -8,13 +8,16 @@ module buffer(
     output wire [19:0] o_r_data,
     output reg buff_warn
 );
+    integer i;
     reg [3:0] r_addr;
     reg [3:0] w_addr;
     reg [19:0] memory [10];
 
-    integer i;
+    assign o_r_data = memory[r_addr];
 
-    always @ (posedge i_clk, posedge i_rst) begin
+    always @ (posedge i_clk) begin
+        buff_warn <= 0;
+
         if (i_rst) begin
             w_addr <= 0;
             for (i=0; i<10; i=i+1) memory[i] <= 0;
@@ -28,18 +31,16 @@ module buffer(
                 end
             end else begin
                 if (r_addr == w_addr + 1) begin
-                    buff_warn <= 0;
+                    buff_warn <= 1;
                 end else begin
-                    memory[0] <= i_w_data;
+                    memory[w_addr + 1] <= i_w_data;
                     w_addr <= w_addr + 1;
                 end
             end
         end
     end
 
-    assign o_r_data = memory[r_addr];
-
-    always @(posedge i_r_next, posedge i_rst) begin
+    always @ (posedge i_r_next) begin
         if (i_rst) begin
             r_addr <= 0;
         end else if (r_addr != w_addr) begin
