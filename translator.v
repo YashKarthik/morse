@@ -5,8 +5,8 @@ module translator (
     output reg[19:0] out
 );
 
-    parameter bit[3:0] DASH = 4'b1110;
-    parameter bit[1:0] DOT = 2'b10;
+    localparam reg [3:0] DASH = 4'b1110;
+    localparam reg [1:0] DOT = 2'b10;
 
     always @ (in_ascii) begin
         casez (in_ascii)

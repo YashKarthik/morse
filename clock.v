@@ -1,8 +1,8 @@
 `default_nettype none
 
 module clock #(
-    parameter int COUNTER_WIDTH = 13,
-    parameter bit[COUNTER_WIDTH-1:0] MAX_COUNT = 624
+    parameter integer COUNTER_WIDTH = 13,
+    parameter reg[COUNTER_WIDTH-1:0] MAX_COUNT = 624
 ) (
     input wire i_clk,
     input wire i_rst,

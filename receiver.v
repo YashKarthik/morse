@@ -23,7 +23,10 @@ module receiver(
     wire baud_clk;
     wire internal_clk;
 
-    clock #(.N(78)) internal_clk_gen(
+    clock #(
+        .MAX_COUNT(78),
+        .COUNTER_WIDTH(7)
+    ) internal_clk_gen (
         .i_clk(i_clk),
         .i_rst(i_rst),
         .o_clk(internal_clk)
