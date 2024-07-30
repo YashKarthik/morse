@@ -14,7 +14,7 @@ module blinker(
 
     wire blinker_clk;
     reg[19:0] blink_data;
-    localparam int SpaceCount = 0;
+    reg[2:0] space_count = 0;
 
     assign LED_B = blink_data[19];
     assign test_clk = blinker_clk;
@@ -38,12 +38,12 @@ module blinker(
         end else begin
             ready <= 0;
             blink_data <= blink_data << 1;
-            SpaceCount <= SpaceCount + 1;
+            space_count <= space_count + 1;
 
-            if (i_s3 && SpaceCount <= 3) begin
-                ready <= 1;
-            end else if (i_s7 && SpaceCount <= 7) begin
-                ready <= 1;
+            if (i_s3 && space_count < 2) begin
+                ready <= 0;
+            end else if (i_s7 && space_count < 6) begin
+                ready <= 0;
             end else if (~(blink_data[18] || blink_data[17])) begin
                 ready <= 1;
             end

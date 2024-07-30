@@ -20,13 +20,18 @@ int main(int argc, char** argv, char** env) {
     m_trace->open("blinker-trace.fst");
 
     circuit->i_read = 1;
+    circuit->i_s3 = 1;
     while (sim_time < MAX_SIM_TIME) {
         circuit->i_clk ^= 1;
-        circuit->morse_code = 0b11101110101000000000;
+        circuit->morse_code = 0;
         circuit->i_rst = 0;
 
         if (circuit->test_clk == 1) {
             circuit->i_read = 0;
+        }
+
+        if (circuit->ready == 1) {
+            circuit->i_s3 = 0;
         }
 
         circuit->eval();
